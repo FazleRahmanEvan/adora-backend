@@ -1,10 +1,10 @@
 import validator from "validator";
 import bcrypt from "bcrypt";
 import { v2 as cloudinary } from "cloudinary";
-import doctorModel from "../models/doctorModel";
 import jwt from "jsonwebtoken";
+import doctorModel from "../models/doctorModel.js";
 
-//API for adding doctor
+// API for adding Doctor
 const addDoctor = async (req, res) => {
   try {
     const {
@@ -18,7 +18,7 @@ const addDoctor = async (req, res) => {
       fees,
       address,
     } = req.body;
-    const imageFile = req.imageFile;
+    const imageFile = req.file;
 
     // checking for all data to add doctor
     if (
@@ -50,6 +50,7 @@ const addDoctor = async (req, res) => {
         message: "Please enter a strong password",
       });
     }
+
     // hashing user password
     const salt = await bcrypt.genSalt(10); // the more no. round the more time it will take
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -83,6 +84,17 @@ const addDoctor = async (req, res) => {
   }
 };
 
+// API to get all doctors list for admin panel
+const allDoctors = async (req, res) => {
+  try {
+    const doctors = await doctorModel.find({}).select("-password");
+    res.json({ success: true, doctors });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
 // API for admin login
 const loginAdmin = async (req, res) => {
   try {
@@ -103,4 +115,4 @@ const loginAdmin = async (req, res) => {
   }
 };
 
-export { addDoctor, loginAdmin };
+export { loginAdmin, addDoctor, allDoctors };
