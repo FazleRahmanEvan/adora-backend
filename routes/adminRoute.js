@@ -5,6 +5,7 @@ import exp from "constants";
 import authAdmin from "../middlewares/authAdmin.js";
 import {
   addDoctor,
+  adminDashboard,
   allDoctors,
   appointmentCancel,
   appointmentsAdmin,
@@ -21,5 +22,6 @@ adminRouter.post("/change-availability", authAdmin, changeAvailablity);
 adminRouter.get("/appointments", authAdmin, appointmentsAdmin);
 
 adminRouter.post("/cancel-appointment", authAdmin, appointmentCancel);
+adminRouter.get("/dashboard", authAdmin, adminDashboard);
 
 export default adminRouter;
